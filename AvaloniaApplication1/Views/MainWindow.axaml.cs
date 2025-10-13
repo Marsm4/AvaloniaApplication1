@@ -31,7 +31,6 @@ namespace AvaloniaApplication1.Views
             _currentView = CurrentView.Users;
             MainDataGrid.ItemsSource = App.dbContext.Users.ToList();
 
-            // Очищаем колонки и добавляем нужные
             MainDataGrid.Columns.Clear();
             MainDataGrid.Columns.Add(new DataGridTextColumn { Header = "Full Name", Binding = new Avalonia.Data.Binding("Name") });
             MainDataGrid.Columns.Add(new DataGridTextColumn { Header = "Email", Binding = new Avalonia.Data.Binding("Email") });
@@ -43,7 +42,7 @@ namespace AvaloniaApplication1.Views
             _currentView = CurrentView.Movies;
             MainDataGrid.ItemsSource = App.dbContext.Movies.ToList();
 
-            // Очищаем колонки и добавляем нужные
+
             MainDataGrid.Columns.Clear();
             MainDataGrid.Columns.Add(new DataGridTextColumn { Header = "Title", Binding = new Avalonia.Data.Binding("Title") });
             MainDataGrid.Columns.Add(new DataGridTextColumn { Header = "Genre", Binding = new Avalonia.Data.Binding("Genre") });
