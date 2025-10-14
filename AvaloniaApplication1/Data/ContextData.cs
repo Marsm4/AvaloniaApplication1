@@ -11,5 +11,6 @@ namespace AvaloniaApplication1.Data
         public static User? CurrentUser { get; set; }
         public static Movie? CurrentMovie { get; set; }
         public static User? CurrentLoggedInUser { get; set; }
+        public static Basket? CurrentBasketItem { get; set; }
     }
 }

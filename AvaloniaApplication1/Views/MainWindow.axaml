@@ -1,3 +1,4 @@
+<!-- MainWindow.xaml - обновленная версия -->
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -15,9 +16,10 @@
         <!-- Панель навигации -->
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10" Spacing="10">
             <TextBlock x:Name="UserInfoText" VerticalAlignment="Center" Margin="0,0,20,0"/>
-            <Button Content="Polzovateli" Click="ShowUsers_Click"/>
-            <Button Content="Film" Click="ShowMovies_Click"/>
-            <Button Content="Exit" Click="Logout_Click" Background="Red" Padding="20,5" Foreground="White" Margin="20,0,0,0"/>
+            <Button Content="User" Click="ShowUsers_Click"/>
+            <Button Content="Movie" Click="ShowMovies_Click"/>
+            <Button Content="Bascket" Click="ShowBasket_Click" Background="Orange" Foreground="White" Padding="15,5"/>
+            <Button Content="Exit" Click="Logout_Click" Background="Red" Padding="15,5" Foreground="White" Margin="20,0,0,0"/>
         </StackPanel>
 
         <!-- Контент -->

@@ -1,3 +1,4 @@
+// MainWindow.xaml.cs - обновленная версия
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -38,6 +39,11 @@ namespace AvaloniaApplication1.Views
             ShowMovies();
         }
 
+        private void ShowBasket_Click(object? sender, RoutedEventArgs e)
+        {
+            ShowBasket();
+        }
+
         private void ShowUsers()
         {
             MainContent.Content = new UsersListView();
@@ -46,6 +52,11 @@ namespace AvaloniaApplication1.Views
         private void ShowMovies()
         {
             MainContent.Content = new MoviesListView();
+        }
+
+        private void ShowBasket()
+        {
+            MainContent.Content = new BasketView();
         }
 
         private void Logout_Click(object? sender, RoutedEventArgs e)
