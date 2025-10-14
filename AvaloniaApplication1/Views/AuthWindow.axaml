@@ -17,7 +17,7 @@
         <TextBox Grid.Row="4" x:Name="tbPassword" Margin="0,0,0,20"/>
         
         <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="15">
-            <Button Content="Exit" Click="Login_Click" Background="Green" Padding="20,5" Foreground="White"/>
+            <Button Content="Voiti" Click="Login_Click" Background="Green" Padding="20,5" Foreground="White"/>
             <Button Content="Registration" Click="Register_Click" Background="Blue" Padding="20,5" Foreground="White"/>
         </StackPanel>
     </Grid>
