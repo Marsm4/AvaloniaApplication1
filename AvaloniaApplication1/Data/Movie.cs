@@ -12,4 +12,7 @@ public partial class Movie
     public string? Genre { get; set; }
 
     public string? Director { get; set; }
+
+    public int? CategoryId { get; set; }
+    public virtual Category? Category { get; set; }
 }

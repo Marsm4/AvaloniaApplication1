@@ -1,0 +1,19 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
+             x:Class="AvaloniaApplication1.Views.CategoryEditView">
+    <Grid RowDefinitions="Auto, Auto, Auto, Auto, *" Margin="20">
+        <TextBlock Grid.Row="0" Text="Name category:"/>
+        <TextBox Grid.Row="1" x:Name="tbName" Margin="0,0,0,10"/>
+        
+        <TextBlock Grid.Row="2" Text="Decreption:"/>
+        <TextBox Grid.Row="3" x:Name="tbDescription" Margin="0,0,0,20"/>
+        
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="15">
+            <Button Content="cancel" Click="CancelButton_Click" Background="Red" Padding="15,5" Foreground="White"/>
+            <Button Content="Save" Click="SaveButton_Click" Background="Green" Padding="15,5" Foreground="White"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

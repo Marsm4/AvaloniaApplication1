@@ -19,6 +19,7 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<Movie> Movies { get; set; }
     public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<Basket> Baskets { get; set; }
+    public virtual DbSet<Category> Categories { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
