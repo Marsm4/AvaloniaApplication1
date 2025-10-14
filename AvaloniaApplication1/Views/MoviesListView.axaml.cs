@@ -1,4 +1,3 @@
-// Views/MoviesListView.xaml.cs - обновленная версия
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using AvaloniaApplication1.Data;
@@ -43,28 +42,23 @@ namespace AvaloniaApplication1.Views
                     return;
                 }
 
-                // Создаем новый контекст для избежания проблем с отслеживанием
                 using var context = new AppDbContext();
-
-                // Проверяем, есть ли уже этот фильм в корзине пользователя
                 var existingBasketItem = context.Baskets
                     .FirstOrDefault(b => b.UserId == currentUser.Id && b.MovieId == selectedMovie.Id);
 
                 if (existingBasketItem != null)
                 {
-                    // Увеличиваем количество, если уже есть в корзине
                     existingBasketItem.Quantity++;
                     context.Baskets.Update(existingBasketItem);
                 }
                 else
                 {
-                    // Добавляем новый элемент в корзину
                     var newBasketItem = new Basket()
                     {
                         UserId = currentUser.Id,
                         MovieId = selectedMovie.Id,
                         Quantity = 1,
-                        AddedDate = DateTime.UtcNow // Явно указываем UTC время
+                        AddedDate = DateTime.UtcNow 
                     };
                     context.Baskets.Add(newBasketItem);
                 }
@@ -78,7 +72,6 @@ namespace AvaloniaApplication1.Views
             }
         }
 
-        // Остальные методы остаются без изменений...
         private async void AddButton_Click(object? sender, RoutedEventArgs e)
         {
             var movieEditView = new MovieEditView();

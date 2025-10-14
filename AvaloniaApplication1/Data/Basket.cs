@@ -13,7 +13,7 @@ namespace AvaloniaApplication1.Data
         public int MovieId { get; set; }
         public int Quantity { get; set; } = 1;
         public DateTimeOffset AddedDate { get; set; } = DateTimeOffset.UtcNow;
-        // Навигационные свойства
+   
         public virtual User? User { get; set; }
         public virtual Movie? Movie { get; set; }
     }

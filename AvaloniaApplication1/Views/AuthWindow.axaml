@@ -13,7 +13,7 @@
         <TextBlock Grid.Row="1" Text="Email"/>
         <TextBox Grid.Row="2" x:Name="tbEmail" Margin="0,0,0,10"/>
         
-        <TextBlock Grid.Row="3" Text="Parol"/>
+        <TextBlock Grid.Row="3" Text="Password"/>
         <TextBox Grid.Row="4" x:Name="tbPassword" Margin="0,0,0,20"/>
         
         <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="15">

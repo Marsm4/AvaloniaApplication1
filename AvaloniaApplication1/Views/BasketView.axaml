@@ -17,7 +17,7 @@
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10" Spacing="10">
             <TextBlock x:Name="TotalText" VerticalAlignment="Center" FontWeight="Bold"/>
-            <Button Content="Ohistka Korzina" Click="ClearBasket_Click" Background="Red" Foreground="White" Padding="15,5"/>
+            <Button Content="clear" Click="ClearBasket_Click" Background="Red" Foreground="White" Padding="15,5"/>
  
             <Button Content="Delete" Click="DeleteButton_Click" Padding="15,5"/>
         </StackPanel>

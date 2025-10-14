@@ -8,7 +8,6 @@ public partial class AppDbContext : DbContext
 {
     public AppDbContext()
     {
-        // Гарантируем, что база данных создана
         Database.EnsureCreated();
     }
 
@@ -31,7 +30,6 @@ public partial class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Конфигурация Movie
         modelBuilder.Entity<Movie>(entity =>
         {
             entity.HasKey(e => e.Id);
@@ -41,7 +39,6 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Director).HasMaxLength(255);
         });
 
-        // Конфигурация User
         modelBuilder.Entity<User>(entity =>
         {
             entity.HasKey(e => e.Id);
@@ -51,31 +48,25 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Password).HasMaxLength(255);
             entity.Property(e => e.Role).HasMaxLength(50);
         });
-
-        // Конфигурация Basket
-        modelBuilder.Entity<Basket>(entity =>
+    modelBuilder.Entity<Basket>(entity =>
         {
             entity.HasKey(e => e.Id);
             entity.ToTable("Baskets");
 
-            // Настройка DateTime для PostgreSQL
             entity.Property(e => e.AddedDate)
-            .HasColumnType("timestamp with time zone"); // Для DateTimeOffset
+            .HasColumnType("timestamp with time zone");
                
 
-            // Внешний ключ для User
             entity.HasOne(b => b.User)
                   .WithMany()
                   .HasForeignKey(b => b.UserId)
                   .OnDelete(DeleteBehavior.Cascade);
 
-            // Внешний ключ для Movie
             entity.HasOne(b => b.Movie)
                   .WithMany()
                   .HasForeignKey(b => b.MovieId)
                   .OnDelete(DeleteBehavior.Cascade);
 
-            // Уникальный индекс для предотвращения дубликатов
             entity.HasIndex(b => new { b.UserId, b.MovieId })
                   .IsUnique();
         });

@@ -23,10 +23,8 @@ namespace AvaloniaApplication1
             {
                 DisableAvaloniaDataAnnotationValidation();
 
-                // Создаем администратора по умолчанию
                 CreateDefaultAdmin();
 
-                // Запускаем окно авторизации
                 desktop.MainWindow = new AuthWindow();
             }
 

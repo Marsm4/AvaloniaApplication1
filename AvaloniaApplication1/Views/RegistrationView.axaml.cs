@@ -19,14 +19,12 @@ namespace AvaloniaApplication1
             string password = tbPassword.Text ?? string.Empty;
             string confirmPassword = tbConfirmPassword.Text ?? string.Empty;
 
-            // Проверка паролей
             if (password != confirmPassword)
             {
                 ShowError("Пароли не совпадают");
                 return;
             }
 
-            // Проверка, существует ли пользователь с таким email
             var existingUser = App.dbContext.Users.FirstOrDefault(u => u.Email == email);
             if (existingUser != null)
             {
@@ -34,19 +32,17 @@ namespace AvaloniaApplication1
                 return;
             }
 
-            // Создание нового пользователя
             var newUser = new User()
             {
                 Name = name,
                 Email = email,
                 Password = password,
-                Role = "User" // По умолчанию обычный пользователь
+                Role = "User" 
             };
 
             App.dbContext.Users.Add(newUser);
             App.dbContext.SaveChanges();
 
-            // Закрываем окно регистрации
             CloseWindow();
         }
 

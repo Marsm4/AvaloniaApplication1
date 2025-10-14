@@ -23,7 +23,6 @@ namespace AvaloniaApplication1.Views
 
                 using var context = new AppDbContext();
 
-                // Загружаем корзину и фильмы отдельно
                 var basketItems = context.Baskets
                     .Where(b => b.UserId == currentUser.Id)
                     .ToList();
@@ -34,7 +33,6 @@ namespace AvaloniaApplication1.Views
                 {
                     var movie = movies.FirstOrDefault(m => m.Id == basket.MovieId);
 
-                    // Конвертируем UTC время в локальное для отображения
                     var localDate = basket.AddedDate.ToLocalTime();
 
                     return new
@@ -49,23 +47,12 @@ namespace AvaloniaApplication1.Views
                 }).ToList();
 
                 BasketDataGrid.ItemsSource = basketData;
-
-                // Настройка колонок
-
-
-
                 BasketDataGrid.Columns.Clear();
                 BasketDataGrid.Columns.Add(new DataGridTextColumn { Header = "Фильм", Binding = new Avalonia.Data.Binding("MovieTitle")});
                 BasketDataGrid.Columns.Add(new DataGridTextColumn { Header = "Жанр", Binding = new Avalonia.Data.Binding("MovieGenre"),});
                 BasketDataGrid.Columns.Add(new DataGridTextColumn { Header = "Режиссер", Binding = new Avalonia.Data.Binding("MovieDirector") });
                 BasketDataGrid.Columns.Add(new DataGridTextColumn { Header = "Количество", Binding = new Avalonia.Data.Binding("Quantity") });
                 BasketDataGrid.Columns.Add(new DataGridTextColumn { Header = "Добавлено", Binding = new Avalonia.Data.Binding("AddedDate") });
-
-
-
-
-
-
 
                 UpdateTotalInfo();
             }
@@ -95,7 +82,6 @@ namespace AvaloniaApplication1.Views
             var selectedItem = BasketDataGrid.SelectedItem;
             if (selectedItem == null) return;
 
-            // Получаем ID через reflection
             var idProperty = selectedItem.GetType().GetProperty("Id");
             if (idProperty == null) return;
 
@@ -123,8 +109,6 @@ namespace AvaloniaApplication1.Views
             App.dbContext.SaveChanges();
             LoadBasket();
         }
-
-
 
         private async void DataGrid_DoubleTapped(object? sender, Avalonia.Input.TappedEventArgs e)
         {

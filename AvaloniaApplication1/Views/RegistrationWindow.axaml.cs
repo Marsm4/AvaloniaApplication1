@@ -21,7 +21,7 @@ namespace AvaloniaApplication1
             string password = tbPassword.Text ?? string.Empty;
             string confirmPassword = tbConfirmPassword.Text ?? string.Empty;
 
-            // Валидация
+
             if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(email) ||
                 string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(confirmPassword))
             {
@@ -35,7 +35,6 @@ namespace AvaloniaApplication1
                 return;
             }
 
-            // Проверяем, существует ли пользователь
             var existingUser = App.dbContext.Users.FirstOrDefault(u => u.Email == email);
             if (existingUser != null)
             {
@@ -43,7 +42,6 @@ namespace AvaloniaApplication1
                 return;
             }
 
-            // Создаем нового пользователя
             var newUser = new User()
             {
                 Name = name,
@@ -55,7 +53,6 @@ namespace AvaloniaApplication1
             App.dbContext.Users.Add(newUser);
             App.dbContext.SaveChanges();
 
-            // Возвращаемся к авторизации
             BackToAuth();
         }
 

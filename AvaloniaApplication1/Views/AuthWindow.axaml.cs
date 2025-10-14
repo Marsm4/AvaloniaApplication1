@@ -20,20 +20,18 @@ namespace AvaloniaApplication1
             string email = tbEmail.Text ?? string.Empty;
             string password = tbPassword.Text ?? string.Empty;
 
-            // Проверяем авторизацию
+
             var user = App.dbContext.Users
                 .FirstOrDefault(u => u.Email == email && u.Password == password);
 
             if (user != null)
             {
-                // Сохраняем текущего пользователя
+                
                 ContextData.CurrentLoggedInUser = user;
 
-                // Открываем главное окно
                 var mainWindow = new MainWindow();
                 mainWindow.Show();
 
-                // Закрываем окно авторизации
                 this.Close();
             }
             else
@@ -44,7 +42,6 @@ namespace AvaloniaApplication1
 
         private void Register_Click(object? sender, RoutedEventArgs e)
         {
-            // Переходим на страницу регистрации
             var registrationWindow = new RegistrationWindow();
             registrationWindow.Show();
             this.Close();
