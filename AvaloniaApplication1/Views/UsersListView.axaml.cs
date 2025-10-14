@@ -1,22 +1,15 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using AvaloniaApplication1.Data;
-using AvaloniaApplication1.ViewModel;
-
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace AvaloniaApplication1.Views
 {
     public partial class UsersListView : UserControl
     {
-        public MainViewModel ParentViewModel { get; }
-
-        public UsersListView(MainViewModel parentViewModel)
+        public UsersListView()
         {
             InitializeComponent();
-            ParentViewModel = parentViewModel;
-            DataContext = this; // Устанавливаем DataContext на себя
             LoadUsers();
         }
 
@@ -24,9 +17,9 @@ namespace AvaloniaApplication1.Views
         {
             UsersDataGrid.ItemsSource = App.dbContext.Users.ToList();
             UsersDataGrid.Columns.Clear();
-            UsersDataGrid.Columns.Add(new DataGridTextColumn { Header = "Full Name", Binding = new Avalonia.Data.Binding("Name") });
+            UsersDataGrid.Columns.Add(new DataGridTextColumn { Header = "Имя", Binding = new Avalonia.Data.Binding("Name") });
             UsersDataGrid.Columns.Add(new DataGridTextColumn { Header = "Email", Binding = new Avalonia.Data.Binding("Email") });
-            UsersDataGrid.Columns.Add(new DataGridTextColumn { Header = "Password", Binding = new Avalonia.Data.Binding("Password") });
+            UsersDataGrid.Columns.Add(new DataGridTextColumn { Header = "Роль", Binding = new Avalonia.Data.Binding("Role") });
         }
 
         private async void AddButton_Click(object? sender, RoutedEventArgs e)

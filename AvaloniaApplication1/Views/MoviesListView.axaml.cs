@@ -1,22 +1,15 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using AvaloniaApplication1.Data;
-using AvaloniaApplication1.ViewModel;
-
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace AvaloniaApplication1.Views
 {
     public partial class MoviesListView : UserControl
     {
-        public MainViewModel ParentViewModel { get; }
-
-        public MoviesListView(MainViewModel parentViewModel)
+        public MoviesListView()
         {
             InitializeComponent();
-            ParentViewModel = parentViewModel;
-            DataContext = this; // Устанавливаем DataContext на себя
             LoadMovies();
         }
 
@@ -24,9 +17,9 @@ namespace AvaloniaApplication1.Views
         {
             MoviesDataGrid.ItemsSource = App.dbContext.Movies.ToList();
             MoviesDataGrid.Columns.Clear();
-            MoviesDataGrid.Columns.Add(new DataGridTextColumn { Header = "Title", Binding = new Avalonia.Data.Binding("Title") });
-            MoviesDataGrid.Columns.Add(new DataGridTextColumn { Header = "Genre", Binding = new Avalonia.Data.Binding("Genre") });
-            MoviesDataGrid.Columns.Add(new DataGridTextColumn { Header = "Director", Binding = new Avalonia.Data.Binding("Director") });
+            MoviesDataGrid.Columns.Add(new DataGridTextColumn { Header = "Название", Binding = new Avalonia.Data.Binding("Title") });
+            MoviesDataGrid.Columns.Add(new DataGridTextColumn { Header = "Жанр", Binding = new Avalonia.Data.Binding("Genre") });
+            MoviesDataGrid.Columns.Add(new DataGridTextColumn { Header = "Режиссер", Binding = new Avalonia.Data.Binding("Director") });
         }
 
         private async void AddButton_Click(object? sender, RoutedEventArgs e)

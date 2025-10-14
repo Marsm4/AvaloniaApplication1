@@ -2,12 +2,25 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:views="clr-namespace:AvaloniaApplication1.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AvaloniaApplication1.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
-        Title="AvaloniaApplication1">
-	<Grid>
-		<ContentControl Content="{Binding CurrentView}"/>
-	</Grid>
+        Title="Управление системой">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Панель навигации -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10" Spacing="10">
+            <TextBlock x:Name="UserInfoText" VerticalAlignment="Center" Margin="0,0,20,0"/>
+            <Button Content="Polzovateli" Click="ShowUsers_Click"/>
+            <Button Content="Film" Click="ShowMovies_Click"/>
+            <Button Content="Exit" Click="Logout_Click" Background="Red" Padding="20,5" Foreground="White" Margin="20,0,0,0"/>
+        </StackPanel>
+
+        <!-- Контент -->
+        <ContentControl Grid.Row="1" x:Name="MainContent"/>
+    </Grid>
 </Window>
