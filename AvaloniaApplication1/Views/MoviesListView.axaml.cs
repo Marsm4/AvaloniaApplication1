@@ -50,7 +50,6 @@ namespace AvaloniaApplication1.Views
         {
             try
             {
-                // Проверяем, что элементы управления существуют
                 if (cbCategoryFilter == null || cbSortBy == null || MoviesDataGrid == null)
                 {
                     Console.WriteLine("One or more controls are null");
@@ -59,14 +58,12 @@ namespace AvaloniaApplication1.Views
 
                 var movies = App.dbContext.Movies.ToList();
 
-                // Применяем фильтрацию по категории
                 var selectedCategory = cbCategoryFilter.SelectedItem as Category;
                 if (selectedCategory != null && selectedCategory.Id != 0)
                 {
                     movies = movies.Where(m => m.CategoryId == selectedCategory.Id).ToList();
                 }
 
-                // Применяем сортировку
                 var sortBy = cbSortBy.SelectedIndex;
                 movies = sortBy switch
                 {
