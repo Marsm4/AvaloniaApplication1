@@ -30,7 +30,46 @@ public partial class AppDbContext : DbContext
             optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=Fifffflms;Username=postgres;Password=123");
         }
     }
+    public void CreateOrderTablesIfNotExist()
+    {
+        try
+        {
+            // Проверяем существование таблицы Orders
+            var ordersExist = Database.CanConnect();
+            if (!ordersExist) return;
 
+            // Создаем таблицы если их нет
+            var connection = Database.GetDbConnection();
+            if (connection.State != System.Data.ConnectionState.Open)
+                connection.Open();
+
+            // Создаем таблицу Orders
+            var createOrdersCommand = connection.CreateCommand();
+            createOrdersCommand.CommandText = @"
+            CREATE TABLE IF NOT EXISTS ""Orders"" (
+                ""Id"" SERIAL PRIMARY KEY,
+                ""UserId"" INTEGER NOT NULL,
+                ""OrderDate"" TIMESTAMP WITH TIME ZONE NOT NULL,
+                ""Status"" TEXT
+            )";
+            createOrdersCommand.ExecuteNonQuery();
+
+            // Создаем таблицу OrderItems
+            var createOrderItemsCommand = connection.CreateCommand();
+            createOrderItemsCommand.CommandText = @"
+            CREATE TABLE IF NOT EXISTS ""OrderItems"" (
+                ""Id"" SERIAL PRIMARY KEY,
+                ""OrderId"" INTEGER NOT NULL,
+                ""MovieId"" INTEGER NOT NULL,
+                ""Quantity"" INTEGER NOT NULL
+            )";
+            createOrderItemsCommand.ExecuteNonQuery();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error creating order tables: {ex.Message}");
+        }
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

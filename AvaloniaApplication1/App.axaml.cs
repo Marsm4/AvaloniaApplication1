@@ -23,7 +23,8 @@ namespace AvaloniaApplication1
             {
                 DisableAvaloniaDataAnnotationValidation();
 
-                CreateDefaultAdmin();
+                // Создаем таблицы заказов
+                dbContext.CreateOrderTablesIfNotExist();
 
                 desktop.MainWindow = new AuthWindow();
             }

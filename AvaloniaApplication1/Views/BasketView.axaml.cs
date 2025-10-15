@@ -136,34 +136,10 @@ namespace AvaloniaApplication1.Views
                     return;
                 }
 
-                // Создаем новый заказ
-                var order = new Order
-                {
-                    UserId = currentUser.Id,
-                    OrderDate = DateTime.Now,
-                    Status = "Completed"
-                };
-
-                context.Orders.Add(order);
-                context.SaveChanges();
-
-                // Переносим товары из корзины в OrderItems
-                foreach (var basketItem in basketItems)
-                {
-                    var orderItem = new OrderItem
-                    {
-                        OrderId = order.Id,
-                        MovieId = basketItem.MovieId,
-                        Quantity = basketItem.Quantity
-                    };
-                    context.OrderItems.Add(orderItem);
-                }
-
-                // Очищаем корзину
                 context.Baskets.RemoveRange(basketItems);
                 context.SaveChanges();
 
-                ShowMessage($"Заказ №{order.Id} успешно оформлен!");
+                ShowMessage($"Заказ успешно оформлен! Товаров: {basketItems.Count}");
                 LoadBasket();
             }
             catch (Exception ex)
