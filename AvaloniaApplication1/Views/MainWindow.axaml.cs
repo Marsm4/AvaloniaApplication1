@@ -58,6 +58,15 @@ namespace AvaloniaApplication1.Views
         {
             MainContent.Content = new BasketView();
         }
+        private void ShowOrders_Click(object? sender, RoutedEventArgs e)
+        {
+            ShowOrders();
+        }
+
+        private void ShowOrders()
+        {
+            MainContent.Content = new OrdersView();
+        }
 
         private void Logout_Click(object? sender, RoutedEventArgs e)
         {

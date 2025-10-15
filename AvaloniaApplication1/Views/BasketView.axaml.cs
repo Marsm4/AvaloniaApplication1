@@ -21,6 +21,7 @@ namespace AvaloniaApplication1.Views
                 var currentUser = ContextData.CurrentLoggedInUser;
                 if (currentUser == null) return;
 
+                // Используем один контекст для всех операций
                 using var context = new AppDbContext();
 
                 var basketItems = context.Baskets
@@ -32,7 +33,6 @@ namespace AvaloniaApplication1.Views
                 var basketData = basketItems.Select(basket =>
                 {
                     var movie = movies.FirstOrDefault(m => m.Id == basket.MovieId);
-
                     var localDate = basket.AddedDate.ToLocalTime();
 
                     return new
@@ -47,9 +47,10 @@ namespace AvaloniaApplication1.Views
                 }).ToList();
 
                 BasketDataGrid.ItemsSource = basketData;
+
                 BasketDataGrid.Columns.Clear();
-                BasketDataGrid.Columns.Add(new DataGridTextColumn { Header = "Фильм", Binding = new Avalonia.Data.Binding("MovieTitle")});
-                BasketDataGrid.Columns.Add(new DataGridTextColumn { Header = "Жанр", Binding = new Avalonia.Data.Binding("MovieGenre"),});
+                BasketDataGrid.Columns.Add(new DataGridTextColumn { Header = "Фильм", Binding = new Avalonia.Data.Binding("MovieTitle") });
+                BasketDataGrid.Columns.Add(new DataGridTextColumn { Header = "Жанр", Binding = new Avalonia.Data.Binding("MovieGenre"), });
                 BasketDataGrid.Columns.Add(new DataGridTextColumn { Header = "Режиссер", Binding = new Avalonia.Data.Binding("MovieDirector") });
                 BasketDataGrid.Columns.Add(new DataGridTextColumn { Header = "Количество", Binding = new Avalonia.Data.Binding("Quantity") });
                 BasketDataGrid.Columns.Add(new DataGridTextColumn { Header = "Добавлено", Binding = new Avalonia.Data.Binding("AddedDate") });
@@ -67,10 +68,12 @@ namespace AvaloniaApplication1.Views
             var currentUser = ContextData.CurrentLoggedInUser;
             if (currentUser == null) return;
 
-            var totalItems = App.dbContext.Baskets
+            using var context = new AppDbContext();
+
+            var totalItems = context.Baskets
                 .Count(b => b.UserId == currentUser.Id);
 
-            var totalQuantity = App.dbContext.Baskets
+            var totalQuantity = context.Baskets
                 .Where(b => b.UserId == currentUser.Id)
                 .Sum(b => b.Quantity);
 
@@ -86,12 +89,14 @@ namespace AvaloniaApplication1.Views
             if (idProperty == null) return;
 
             var basketId = (int)idProperty.GetValue(selectedItem);
-            var basketItem = App.dbContext.Baskets.FirstOrDefault(b => b.Id == basketId);
+
+            using var context = new AppDbContext();
+            var basketItem = context.Baskets.FirstOrDefault(b => b.Id == basketId);
 
             if (basketItem != null)
             {
-                App.dbContext.Baskets.Remove(basketItem);
-                App.dbContext.SaveChanges();
+                context.Baskets.Remove(basketItem);
+                context.SaveChanges();
                 LoadBasket();
             }
         }
@@ -101,13 +106,70 @@ namespace AvaloniaApplication1.Views
             var currentUser = ContextData.CurrentLoggedInUser;
             if (currentUser == null) return;
 
-            var userBasketItems = App.dbContext.Baskets
+            using var context = new AppDbContext();
+
+            var userBasketItems = context.Baskets
                 .Where(b => b.UserId == currentUser.Id)
                 .ToList();
 
-            App.dbContext.Baskets.RemoveRange(userBasketItems);
-            App.dbContext.SaveChanges();
+            context.Baskets.RemoveRange(userBasketItems);
+            context.SaveChanges();
             LoadBasket();
+        }
+
+        private void CheckoutButton_Click(object? sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var currentUser = ContextData.CurrentLoggedInUser;
+                if (currentUser == null) return;
+
+                using var context = new AppDbContext();
+
+                var basketItems = context.Baskets
+                    .Where(b => b.UserId == currentUser.Id)
+                    .ToList();
+
+                if (!basketItems.Any())
+                {
+                    ShowMessage("Корзина пуста");
+                    return;
+                }
+
+                // Создаем новый заказ
+                var order = new Order
+                {
+                    UserId = currentUser.Id,
+                    OrderDate = DateTime.Now,
+                    Status = "Completed"
+                };
+
+                context.Orders.Add(order);
+                context.SaveChanges();
+
+                // Переносим товары из корзины в OrderItems
+                foreach (var basketItem in basketItems)
+                {
+                    var orderItem = new OrderItem
+                    {
+                        OrderId = order.Id,
+                        MovieId = basketItem.MovieId,
+                        Quantity = basketItem.Quantity
+                    };
+                    context.OrderItems.Add(orderItem);
+                }
+
+                // Очищаем корзину
+                context.Baskets.RemoveRange(basketItems);
+                context.SaveChanges();
+
+                ShowMessage($"Заказ №{order.Id} успешно оформлен!");
+                LoadBasket();
+            }
+            catch (Exception ex)
+            {
+                ShowMessage($"Ошибка при оформлении заказа: {ex.Message}");
+            }
         }
 
         private async void DataGrid_DoubleTapped(object? sender, Avalonia.Input.TappedEventArgs e)
@@ -119,7 +181,9 @@ namespace AvaloniaApplication1.Views
             if (idProperty == null) return;
 
             var basketId = (int)idProperty.GetValue(selectedItem);
-            var basketItem = App.dbContext.Baskets.FirstOrDefault(b => b.Id == basketId);
+
+            using var context = new AppDbContext();
+            var basketItem = context.Baskets.FirstOrDefault(b => b.Id == basketId);
 
             if (basketItem != null)
             {
