@@ -27,7 +27,7 @@ public partial class AppDbContext : DbContext
     {
         if (!optionsBuilder.IsConfigured)
         {
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=Films;Username=postgres;Password=123");
+            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=Fifffflms;Username=postgres;Password=123");
         }
     }
 

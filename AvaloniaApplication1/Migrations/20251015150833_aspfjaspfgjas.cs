@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AvaloniaApplication1.Migrations
 {
     /// <inheritdoc />
-    public partial class fas : Migration
+    public partial class aspfjaspfgjas : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

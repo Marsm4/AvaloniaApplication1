@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AvaloniaApplication1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251015144550_fas")]
-    partial class fas
+    [Migration("20251015150833_aspfjaspfgjas")]
+    partial class aspfjaspfgjas
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
