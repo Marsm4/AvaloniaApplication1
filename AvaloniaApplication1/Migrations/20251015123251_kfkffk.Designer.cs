@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AvaloniaApplication1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251014140918_afsf")]
-    partial class afsf
+    [Migration("20251015123251_kfkffk")]
+    partial class kfkffk
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,7 +33,7 @@ namespace AvaloniaApplication1.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("AddedDate")
+                    b.Property<DateTimeOffset>("AddedDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("MovieId")
@@ -55,6 +55,25 @@ namespace AvaloniaApplication1.Migrations
                     b.ToTable("Baskets", (string)null);
                 });
 
+            modelBuilder.Entity("AvaloniaApplication1.Data.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("AvaloniaApplication1.Data.Movie", b =>
                 {
                     b.Property<int>("Id")
@@ -62,6 +81,9 @@ namespace AvaloniaApplication1.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Director")
                         .HasMaxLength(255)
@@ -76,6 +98,8 @@ namespace AvaloniaApplication1.Migrations
                         .HasColumnType("character varying(255)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Movies", (string)null);
                 });
@@ -127,6 +151,20 @@ namespace AvaloniaApplication1.Migrations
                     b.Navigation("Movie");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AvaloniaApplication1.Data.Movie", b =>
+                {
+                    b.HasOne("AvaloniaApplication1.Data.Category", "Category")
+                        .WithMany("Movies")
+                        .HasForeignKey("CategoryId");
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("AvaloniaApplication1.Data.Category", b =>
+                {
+                    b.Navigation("Movies");
                 });
 #pragma warning restore 612, 618
         }

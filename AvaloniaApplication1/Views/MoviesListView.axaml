@@ -4,39 +4,20 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="AvaloniaApplication1.Views.MoviesListView">
-    <Grid RowDefinitions="Auto, Auto, *, Auto">
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
-            <TextBlock Text="Управление фильмами" FontSize="16" FontWeight="Bold"/>
-        </StackPanel>
-        
-        <!-- Панель фильтров и сортировки -->
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10" Spacing="10">
-            <TextBlock Text="Категория:" VerticalAlignment="Center"/>
-            <ComboBox x:Name="cbCategoryFilter" Width="150" 
-                      SelectionChanged="CategoryFilter_SelectionChanged"/>
-            
-            <TextBlock Text="Сортировка:" VerticalAlignment="Center" Margin="20,0,0,0"/>
-            <ComboBox x:Name="cbSortBy" Width="150" SelectedIndex="0"
-                      SelectionChanged="SortBy_SelectionChanged">
-                <ComboBoxItem Content="По названию (А-Я)"/>
-                <ComboBoxItem Content="По названию (Я-А)"/>
-                <ComboBoxItem Content="По жанру"/>
-                <ComboBoxItem Content="По режиссеру"/>
-                <ComboBoxItem Content="По категории"/>
-            </ComboBox>
-            
-            <Button x:Name="btnResetFilters" Content="Сбросить фильтры" Click="ResetFilters_Click" Padding="10,5"/>
-        </StackPanel>
+	<Grid RowDefinitions="Auto, *, Auto">
+		<StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
+			<TextBlock Text="Управление фильмами" FontSize="16" FontWeight="Bold"/>
+		</StackPanel>
 
-        <DataGrid x:Name="MoviesDataGrid" IsReadOnly="True"
-                  Grid.Row="2"
+		<DataGrid x:Name="MoviesDataGrid" IsReadOnly="True"
+                  Grid.Row="1"
                   DoubleTapped="DataGrid_DoubleTapped">
-        </DataGrid>
+		</DataGrid>
 
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10" Spacing="10">
-            <Button x:Name="btnAddToBasket" Content="В корзину" Click="AddToBasket_Click" Background="Orange" Foreground="White" Padding="15,5"/>
-            <Button x:Name="btnAddMovie" Content="Добавить фильм" Click="AddButton_Click" Padding="15,5"/>
-            <Button x:Name="btnDeleteMovie" Content="Удалить фильм" Click="DeleteButton_Click" Padding="15,5"/>
-        </StackPanel>
-    </Grid>
+		<StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10" Spacing="10">
+			<Button x:Name="btnAddToBasket" Content="В корзину" Click="AddToBasket_Click" Background="Orange" Foreground="White" Padding="15,5"/>
+			<Button x:Name="btnAddMovie" Content="Добавить фильм" Click="AddButton_Click" Padding="15,5"/>
+			<Button x:Name="btnDeleteMovie" Content="Удалить фильм" Click="DeleteButton_Click" Padding="15,5"/>
+		</StackPanel>
+	</Grid>
 </UserControl>

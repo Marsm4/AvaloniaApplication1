@@ -11,136 +11,43 @@ namespace AvaloniaApplication1.Views
         public MoviesListView()
         {
             InitializeComponent();
-            InitializeControls();
-        }
-
-        private void InitializeControls()
-        {
-            // Инициализация элементов управления
-            LoadCategories();
             LoadMovies();
-        }
-
-        private void LoadCategories()
-        {
-            try
-            {
-                // Проверяем, что элемент управления существует
-                if (cbCategoryFilter == null)
-                {
-                    Console.WriteLine("cbCategoryFilter is null");
-                    return;
-                }
-
-                var categories = App.dbContext.Categories.ToList();
-
-                var allCategories = new Category { Id = 0, Name = "Все категории" };
-                var categoriesList = categories.Prepend(allCategories).ToList();
-
-                cbCategoryFilter.ItemsSource = categoriesList;
-                cbCategoryFilter.SelectedItem = allCategories;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error loading categories: {ex.Message}");
-            }
         }
 
         private void LoadMovies()
         {
             try
             {
-                if (cbCategoryFilter == null || cbSortBy == null || MoviesDataGrid == null)
-                {
-                    Console.WriteLine("One or more controls are null");
-                    return;
-                }
+                if (MoviesDataGrid == null) return;
 
                 var movies = App.dbContext.Movies.ToList();
-
-                var selectedCategory = cbCategoryFilter.SelectedItem as Category;
-                if (selectedCategory != null && selectedCategory.Id != 0)
-                {
-                    movies = movies.Where(m => m.CategoryId == selectedCategory.Id).ToList();
-                }
-
-                var sortBy = cbSortBy.SelectedIndex;
-                movies = sortBy switch
-                {
-                    0 => movies.OrderBy(m => m.Title).ToList(),
-                    1 => movies.OrderByDescending(m => m.Title).ToList(),
-                    2 => movies.OrderBy(m => m.Genre).ThenBy(m => m.Title).ToList(),
-                    3 => movies.OrderBy(m => m.Director).ThenBy(m => m.Title).ToList(),
-                    4 => movies.OrderBy(m => m.Category != null ? m.Category.Name : "").ThenBy(m => m.Title).ToList(),
-                    _ => movies.OrderBy(m => m.Title).ToList()
-                };
-
                 MoviesDataGrid.ItemsSource = movies;
+
                 MoviesDataGrid.Columns.Clear();
                 MoviesDataGrid.Columns.Add(new DataGridTextColumn
                 {
                     Header = "Название",
                     Binding = new Avalonia.Data.Binding("Title"),
-                
                 });
                 MoviesDataGrid.Columns.Add(new DataGridTextColumn
                 {
                     Header = "Жанр",
                     Binding = new Avalonia.Data.Binding("Genre"),
-                
                 });
                 MoviesDataGrid.Columns.Add(new DataGridTextColumn
                 {
                     Header = "Режиссер",
                     Binding = new Avalonia.Data.Binding("Director"),
-              
                 });
                 MoviesDataGrid.Columns.Add(new DataGridTextColumn
                 {
                     Header = "Категория",
                     Binding = new Avalonia.Data.Binding("Category.Name"),
-               
                 });
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error loading movies: {ex.Message}");
-            }
-        }
-
-        private void CategoryFilter_SelectionChanged(object? sender, SelectionChangedEventArgs e)
-        {
-            if (cbCategoryFilter != null)
-            {
-                LoadMovies();
-            }
-        }
-
-        private void SortBy_SelectionChanged(object? sender, SelectionChangedEventArgs e)
-        {
-            if (cbSortBy != null)
-            {
-                LoadMovies();
-            }
-        }
-
-        private void ResetFilters_Click(object? sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (cbCategoryFilter == null || cbSortBy == null) return;
-
-                var allCategories = cbCategoryFilter.ItemsSource?.OfType<Category>().FirstOrDefault(c => c.Id == 0);
-                if (allCategories != null)
-                {
-                    cbCategoryFilter.SelectedItem = allCategories;
-                }
-                cbSortBy.SelectedIndex = 0;
-                LoadMovies();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error resetting filters: {ex.Message}");
             }
         }
 
@@ -268,22 +175,9 @@ namespace AvaloniaApplication1.Views
 
         private void ShowMessage(string message)
         {
-            try
-            {
-                var messageBox = new Window
-                {
-                    Title = "Информация",
-                    Content = new TextBlock { Text = message },
-                    Width = 300,
-                    Height = 150,
-                    WindowStartupLocation = WindowStartupLocation.CenterOwner
-                };
-                messageBox.ShowDialog((Window)this.VisualRoot);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error showing message: {ex.Message}");
-            }
+         
+                Console.WriteLine("Ошибка");
+            
         }
     }
 }

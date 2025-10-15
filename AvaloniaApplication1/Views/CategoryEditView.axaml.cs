@@ -1,8 +1,6 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using AvaloniaApplication1.Data;
-using System.Xml.Linq;
 
 namespace AvaloniaApplication1.Views
 {
@@ -20,24 +18,16 @@ namespace AvaloniaApplication1.Views
                 _category = ContextData.CurrentCategory;
                 _isEditMode = true;
                 tbName.Text = _category.Name;
-                tbDescription.Text = _category.Description ?? string.Empty;
+                tbDescription.Text = _category.Description;
             }
             else
             {
                 _isEditMode = false;
             }
-
         }
 
-  
         private void SaveButton_Click(object? sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(tbName.Text))
-            {
-                ShowMessage("Название категории не может быть пустым");
-                return;
-            }
-
             if (_isEditMode && _category != null)
             {
                 _category.Name = tbName.Text;
@@ -61,19 +51,6 @@ namespace AvaloniaApplication1.Views
         private void CancelButton_Click(object? sender, RoutedEventArgs e)
         {
             CloseWindow();
-        }
-
-        private void ShowMessage(string message)
-        {
-            var messageBox = new Window
-            {
-                Title = "Ошибка",
-                Content = new TextBlock { Text = message },
-                Width = 300,
-                Height = 150,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner
-            };
-            messageBox.ShowDialog((Window)this.VisualRoot);
         }
 
         private void CloseWindow()

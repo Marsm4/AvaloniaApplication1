@@ -4,16 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="400"
              x:Class="AvaloniaApplication1.Views.CategoriesView">
-    <Grid RowDefinitions="Auto, *, Auto" Margin="10">
-        <TextBlock Grid.Row="0" Text="Category management" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
-        
-        <DataGrid Grid.Row="1" Name="CategoriesDataGrid" IsReadOnly="True" 
+	<Grid RowDefinitions="Auto, *, Auto" Margin="10">
+		<TextBlock Grid.Row="0" Text="Category management" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+
+		<DataGrid Grid.Row="1" Name="CategoriesDataGrid" IsReadOnly="True"
                   DoubleTapped="DataGrid_DoubleTapped"/>
-        
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10" Margin="0,10,0,0">
-            <Button Content="New Categoty" Click="AddButton_Click" Background="Green" Padding="15,5" Foreground="White"/>
-            <Button Content="Delete Categoty" Click="DeleteButton_Click" Background="Red" Padding="15,5" Foreground="White"/>
-            <Button Content="Cloce" Click="CloseButton_Click" Padding="15,5"/>
-        </StackPanel>
-    </Grid>
+
+		<StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10" Margin="0,10,0,0">
+			<Button Content="New Category" Click="AddButton_Click" Background="Green" Padding="15,5" Foreground="White"/>
+			<Button Content="Delete Category" Click="DeleteButton_Click" Background="Red" Padding="15,5" Foreground="White"/>
+			<Button Content="Close" Click="CloseButton_Click" Padding="15,5"/>
+		</StackPanel>
+	</Grid>
 </UserControl>

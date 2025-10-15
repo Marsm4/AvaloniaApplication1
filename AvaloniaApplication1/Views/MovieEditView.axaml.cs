@@ -23,11 +23,10 @@ namespace AvaloniaApplication1.Views
                 tbGenre.Text = _movie.Genre;
                 tbDirector.Text = _movie.Director;
 
-                // Устанавливаем выбранную категорию
                 if (_movie.CategoryId.HasValue)
                 {
-                    var categories = App.dbContext.Categories.ToList();
-                    var selectedCategory = categories.FirstOrDefault(c => c.Id == _movie.CategoryId.Value);
+                    var selectedCategory = App.dbContext.Categories
+                        .FirstOrDefault(c => c.Id == _movie.CategoryId.Value);
                     if (selectedCategory != null)
                     {
                         cbCategory.SelectedItem = selectedCategory;
@@ -37,12 +36,6 @@ namespace AvaloniaApplication1.Views
             else
             {
                 _isEditMode = false;
-                // Устанавливаем категорию "Без категории" по умолчанию
-                var defaultCategory = App.dbContext.Categories.FirstOrDefault(c => c.Name == "Без категории");
-                if (defaultCategory != null)
-                {
-                    cbCategory.SelectedItem = defaultCategory;
-                }
             }
         }
 
@@ -51,30 +44,27 @@ namespace AvaloniaApplication1.Views
             var categories = App.dbContext.Categories.ToList();
             cbCategory.ItemsSource = categories;
 
-            if (!categories.Any())
+            if (categories.Any() && cbCategory.SelectedItem == null)
             {
-                // Создаем дефолтную категорию если нет категорий
-                var defaultCategory = new Category { Name = "Без категории", Description = "Фильмы без категории" };
-                App.dbContext.Categories.Add(defaultCategory);
-                App.dbContext.SaveChanges();
-                cbCategory.ItemsSource = App.dbContext.Categories.ToList();
+                cbCategory.SelectedIndex = 0;
             }
         }
 
-        private async void ManageCategories_Click(object? sender, RoutedEventArgs e)
+        private async void AddCategory_Click(object? sender, RoutedEventArgs e)
         {
-            var categoriesView = new CategoriesView();
+            var categoryEditView = new CategoryEditView();
             var window = new Window
             {
-                Content = categoriesView,
-                Title = "Управление категориями",
-                Width = 500,
-                Height = 400,
+                Content = categoryEditView,
+                Title = "Add New Category",
+                Width = 400,
+                Height = 250,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner
             };
 
             await window.ShowDialog((Window)this.VisualRoot);
-            LoadCategories(); // Перезагружаем категории после закрытия окна управления
+
+            LoadCategories();
         }
 
         private void SaveButton_Click(object? sender, RoutedEventArgs e)
