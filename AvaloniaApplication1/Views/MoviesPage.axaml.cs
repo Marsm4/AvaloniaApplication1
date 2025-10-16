@@ -5,47 +5,94 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using AvaloniaApplication1.Data;
+using MsBox.Avalonia.Enums;
+using MsBox.Avalonia;
 
 namespace AvaloniaApplication1
 {
     public partial class MoviesPage : UserControl
     {
+        private int? _selectedCategoryId = null;
+
         public MoviesPage()
         {
             InitializeComponent();
+            LoadCategories();
             Refresh();
+        }
+
+        private void LoadCategories()
+        {
+            var categories = App.dbContext.Categories.ToList();
+
+            cbCategoryFilter.Items.Clear();
+            cbCategoryFilter.Items.Add(new ComboBoxItem { Content = "Все категории" });
+
+            foreach (var category in categories)
+            {
+                cbCategoryFilter.Items.Add(new ComboBoxItem
+                {
+                    Content = category.Name,
+                    Tag = category.Id
+                });
+            }
+
+            cbCategoryFilter.SelectedIndex = 0;
         }
 
         private async void btnAddMovie_Click(object? sender, RoutedEventArgs e)
         {
             var parent = this.VisualRoot as Window;
             var add = new AddAndChangeMovie();
+
+            var currentFilter = _selectedCategoryId;
+
             await add.ShowDialog(parent);
+
+            LoadCategories();
             Refresh();
+
+            if (currentFilter.HasValue)
+            {
+                foreach (ComboBoxItem item in cbCategoryFilter.Items)
+                {
+                    if (item.Tag is int categoryId && categoryId == currentFilter.Value)
+                    {
+                        cbCategoryFilter.SelectedItem = item;
+                        break;
+                    }
+                }
+            }
         }
 
         private async void btnDeleteMovie_Click(object? sender, RoutedEventArgs e)
         {
             var movie = (sender as Button).Tag as Movie;
-            var confirmWindow = new ConfirmDialog("Удаление фильма " + movie.Title);
+            var box = MessageBoxManager
+                .GetMessageBoxStandard("Подтверждение", $"Вы уверены, что хотите удалить фильм '{movie.Title}'?",
+                    ButtonEnum.YesNo);
 
-            confirmWindow.Height = 100;
-            confirmWindow.Width = 300;
+            var result = await box.ShowAsync();
 
-            var parent = this.VisualRoot as Window;
-            var result = await confirmWindow.ShowDialog<bool>(parent);
-
-            if (result)
+            if (result == ButtonResult.Yes)
             {
                 App.dbContext.Movies.Remove(movie);
                 App.dbContext.SaveChanges();
+                Refresh();
             }
-            Refresh();
         }
 
         private void Refresh()
         {
-            dgMovies.ItemsSource = App.dbContext.Movies.ToList().OrderBy(x => x.Id);
+            IQueryable<Movie> query = App.dbContext.Movies;
+
+            if (_selectedCategoryId.HasValue)
+            {
+                query = query.Where(m => m.CategoryId == _selectedCategoryId.Value);
+            }
+
+            var movies = query.ToList();
+            dgMovies.ItemsSource = movies.OrderBy(x => x.Id);
         }
 
         private async void btnEditMovie_Click(object? sender, RoutedEventArgs e)
@@ -53,10 +100,26 @@ namespace AvaloniaApplication1
             var movie = (sender as Button).Tag as Movie;
             if (movie == null) return;
 
+            var currentFilter = _selectedCategoryId;
+
             var editWindow = new AddAndChangeMovie(movie);
             var parent = this.VisualRoot as Window;
             await editWindow.ShowDialog(parent);
+
+            LoadCategories();
             Refresh();
+
+            if (currentFilter.HasValue)
+            {
+                foreach (ComboBoxItem item in cbCategoryFilter.Items)
+                {
+                    if (item.Tag is int categoryId && categoryId == currentFilter.Value)
+                    {
+                        cbCategoryFilter.SelectedItem = item;
+                        break;
+                    }
+                }
+            }
         }
 
         private void btnAddToBasket_Click(object? sender, RoutedEventArgs e)
@@ -99,9 +162,34 @@ namespace AvaloniaApplication1
             ShowMessage($"Фильм '{movie.Title}' добавлен в корзину");
         }
 
+        private void cbCategoryFilter_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+        {
+            if (cbCategoryFilter.SelectedItem is ComboBoxItem selectedItem)
+            {
+                if (selectedItem.Content?.ToString() == "Все категории")
+                {
+                    _selectedCategoryId = null;
+                }
+                else if (selectedItem.Tag is int categoryId)
+                {
+                    _selectedCategoryId = categoryId;
+                }
+            }
+            Refresh();
+        }
+
+        private void btnResetFilter_Click(object? sender, RoutedEventArgs e)
+        {
+            _selectedCategoryId = null;
+            cbCategoryFilter.SelectedIndex = 0;
+            Refresh();
+        }
+
         private void ShowMessage(string message)
         {
-            Console.WriteLine(message);
+            var box = MessageBoxManager
+                .GetMessageBoxStandard("Информация", message, ButtonEnum.Ok);
+            box.ShowAsync();
         }
     }
 }
