@@ -45,7 +45,6 @@ namespace AvaloniaApplication1
 
             dgBasket.ItemsSource = basketData;
 
-            // Обновляем информацию о корзине
             var totalItems = basketItems.Count;
             var totalQuantity = basketItems.Sum(b => b.Quantity);
             tbTotalInfo.Text = $"Всего: {totalItems} позиций, {totalQuantity} шт.";
@@ -173,7 +172,7 @@ namespace AvaloniaApplication1
 
         private void ShowMessage(string message)
         {
-           
+            Console.WriteLine(message);
         }
     }
 }

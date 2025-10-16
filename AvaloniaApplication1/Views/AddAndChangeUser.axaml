@@ -14,6 +14,8 @@
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 
 		<TextBlock Text="Имя" Grid.Row="0"/>

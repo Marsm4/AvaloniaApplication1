@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
@@ -100,7 +101,7 @@ namespace AvaloniaApplication1
 
         private void ShowMessage(string message)
         {
-            // Реализация показа сообщения
+            Console.WriteLine(message);
         }
     }
 }
