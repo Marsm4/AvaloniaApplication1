@@ -1,6 +1,8 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using AvaloniaApplication1.Data;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 
 namespace AvaloniaApplication1.Views
@@ -18,29 +20,40 @@ namespace AvaloniaApplication1.Views
             var currentUser = ContextData.CurrentLoggedInUser;
             if (currentUser == null) return;
 
-            // Получаем заказы с информацией о количестве товаров
-            var orders = App.dbContext.Orders
-                .Where(o => o.UserId == currentUser.Id)
-                .OrderByDescending(o => o.OrderDate)
-                .ToList();
-
-            var ordersData = orders.Select(order => new
+            try
             {
-                Id = order.Id,
-                OrderDate = order.OrderDate.ToString("dd.MM.yyyy HH:mm"),
-                Status = order.Status,
-                ItemsCount = App.dbContext.OrderItems.Count(oi => oi.OrderId == order.Id),
-                TotalQuantity = App.dbContext.OrderItems.Where(oi => oi.OrderId == order.Id).Sum(oi => oi.Quantity)
-            }).ToList();
+                using var context = new AppDbContext();
 
-            OrdersDataGrid.ItemsSource = ordersData;
+                var orders = context.Orders
+                    .Where(o => o.UserId == currentUser.Id)
+                    .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Movie)
+                    .OrderByDescending(o => o.OrderDate)
+                    .ToList();
 
-            OrdersDataGrid.Columns.Clear();
-            OrdersDataGrid.Columns.Add(new DataGridTextColumn { Header = "№ Заказа", Binding = new Avalonia.Data.Binding("Id") });
-            OrdersDataGrid.Columns.Add(new DataGridTextColumn { Header = "Дата заказа", Binding = new Avalonia.Data.Binding("OrderDate") });
-            OrdersDataGrid.Columns.Add(new DataGridTextColumn { Header = "Статус", Binding = new Avalonia.Data.Binding("Status") });
-            OrdersDataGrid.Columns.Add(new DataGridTextColumn { Header = "Кол-во позиций", Binding = new Avalonia.Data.Binding("ItemsCount") });
-            OrdersDataGrid.Columns.Add(new DataGridTextColumn { Header = "Общее кол-во", Binding = new Avalonia.Data.Binding("TotalQuantity") });
+                var ordersData = orders.Select(order => new
+                {
+                    Id = order.Id,
+                    // Конвертируем UTC в локальное время для отображения
+                    OrderDate = order.OrderDate.ToLocalTime().ToString("dd.MM.yyyy HH:mm"),
+                    Status = order.Status,
+                    TotalItems = order.OrderItems.Sum(oi => oi.Quantity),
+                    ItemsCount = order.OrderItems.Count
+                }).ToList();
+
+                OrdersDataGrid.ItemsSource = ordersData;
+
+                OrdersDataGrid.Columns.Clear();
+                OrdersDataGrid.Columns.Add(new DataGridTextColumn { Header = "№ Заказа", Binding = new Avalonia.Data.Binding("Id") });
+                OrdersDataGrid.Columns.Add(new DataGridTextColumn { Header = "Дата заказа", Binding = new Avalonia.Data.Binding("OrderDate") });
+                OrdersDataGrid.Columns.Add(new DataGridTextColumn { Header = "Статус", Binding = new Avalonia.Data.Binding("Status") });
+                OrdersDataGrid.Columns.Add(new DataGridTextColumn { Header = "Всего товаров", Binding = new Avalonia.Data.Binding("TotalItems") });
+                OrdersDataGrid.Columns.Add(new DataGridTextColumn { Header = "Позиций", Binding = new Avalonia.Data.Binding("ItemsCount") });
+            }
+            catch (Exception ex)
+            {
+                ShowMessage($"Ошибка загрузки заказов: {ex.Message}");
+            }
         }
 
         private void ViewDetails_Click(object? sender, RoutedEventArgs e)

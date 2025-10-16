@@ -4,6 +4,8 @@ using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using AvaloniaApplication1.Data;
+using Npgsql;
+using System;
 using System.Linq;
 
 namespace AvaloniaApplication1
@@ -16,6 +18,19 @@ namespace AvaloniaApplication1
         {
             AvaloniaXamlLoader.Load(this);
         }
+        private void InitializeDatabase()
+        {
+            try
+            {
+        
+                dbContext.Database.EnsureCreated();
+               
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Database initialization failed: {ex.Message}");
+            }
+        }
 
         public override void OnFrameworkInitializationCompleted()
         {
@@ -23,8 +38,15 @@ namespace AvaloniaApplication1
             {
                 DisableAvaloniaDataAnnotationValidation();
 
-                // Создаем таблицы заказов
-                dbContext.CreateOrderTablesIfNotExist();
+                // Просто обеспечиваем создание БД
+                try
+                {
+                    dbContext.Database.EnsureCreated();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Database creation error: {ex.Message}");
+                }
 
                 desktop.MainWindow = new AuthWindow();
             }

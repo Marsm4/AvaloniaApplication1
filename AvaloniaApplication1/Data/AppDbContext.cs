@@ -27,7 +27,7 @@ public partial class AppDbContext : DbContext
     {
         if (!optionsBuilder.IsConfigured)
         {
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=Fifffflms;Username=postgres;Password=123");
+            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=Fifffflms;Username=postgres;Password=12345");
         }
     }
     public void CreateOrderTablesIfNotExist()
@@ -35,35 +35,33 @@ public partial class AppDbContext : DbContext
         try
         {
             // Проверяем существование таблицы Orders
-            var ordersExist = Database.CanConnect();
-            if (!ordersExist) return;
-
-            // Создаем таблицы если их нет
             var connection = Database.GetDbConnection();
             if (connection.State != System.Data.ConnectionState.Open)
                 connection.Open();
 
-            // Создаем таблицу Orders
+            // Создаем таблицу Orders если не существует
             var createOrdersCommand = connection.CreateCommand();
             createOrdersCommand.CommandText = @"
-            CREATE TABLE IF NOT EXISTS ""Orders"" (
-                ""Id"" SERIAL PRIMARY KEY,
-                ""UserId"" INTEGER NOT NULL,
-                ""OrderDate"" TIMESTAMP WITH TIME ZONE NOT NULL,
-                ""Status"" TEXT
-            )";
+                CREATE TABLE IF NOT EXISTS ""Orders"" (
+                    ""Id"" SERIAL PRIMARY KEY,
+                    ""UserId"" INTEGER NOT NULL,
+                    ""OrderDate"" TIMESTAMP WITH TIME ZONE NOT NULL,
+                    ""Status"" TEXT
+                )";
             createOrdersCommand.ExecuteNonQuery();
 
-            // Создаем таблицу OrderItems
+            // Создаем таблицу OrderItems если не существует
             var createOrderItemsCommand = connection.CreateCommand();
             createOrderItemsCommand.CommandText = @"
-            CREATE TABLE IF NOT EXISTS ""OrderItems"" (
-                ""Id"" SERIAL PRIMARY KEY,
-                ""OrderId"" INTEGER NOT NULL,
-                ""MovieId"" INTEGER NOT NULL,
-                ""Quantity"" INTEGER NOT NULL
-            )";
+                CREATE TABLE IF NOT EXISTS ""OrderItems"" (
+                    ""Id"" SERIAL PRIMARY KEY,
+                    ""OrderId"" INTEGER NOT NULL,
+                    ""MovieId"" INTEGER NOT NULL,
+                    ""Quantity"" INTEGER NOT NULL
+                )";
             createOrderItemsCommand.ExecuteNonQuery();
+
+            Console.WriteLine("Order tables created successfully");
         }
         catch (Exception ex)
         {

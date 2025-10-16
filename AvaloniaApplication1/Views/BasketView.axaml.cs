@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using AvaloniaApplication1.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 
@@ -21,7 +22,6 @@ namespace AvaloniaApplication1.Views
                 var currentUser = ContextData.CurrentLoggedInUser;
                 if (currentUser == null) return;
 
-                // Используем один контекст для всех операций
                 using var context = new AppDbContext();
 
                 var basketItems = context.Baskets
@@ -33,6 +33,7 @@ namespace AvaloniaApplication1.Views
                 var basketData = basketItems.Select(basket =>
                 {
                     var movie = movies.FirstOrDefault(m => m.Id == basket.MovieId);
+                    // Конвертируем UTC в локальное время для отображения
                     var localDate = basket.AddedDate.ToLocalTime();
 
                     return new
@@ -48,9 +49,10 @@ namespace AvaloniaApplication1.Views
 
                 BasketDataGrid.ItemsSource = basketData;
 
+                // ... остальной код остается без изменений
                 BasketDataGrid.Columns.Clear();
                 BasketDataGrid.Columns.Add(new DataGridTextColumn { Header = "Фильм", Binding = new Avalonia.Data.Binding("MovieTitle") });
-                BasketDataGrid.Columns.Add(new DataGridTextColumn { Header = "Жанр", Binding = new Avalonia.Data.Binding("MovieGenre"), });
+                BasketDataGrid.Columns.Add(new DataGridTextColumn { Header = "Жанр", Binding = new Avalonia.Data.Binding("MovieGenre") });
                 BasketDataGrid.Columns.Add(new DataGridTextColumn { Header = "Режиссер", Binding = new Avalonia.Data.Binding("MovieDirector") });
                 BasketDataGrid.Columns.Add(new DataGridTextColumn { Header = "Количество", Binding = new Avalonia.Data.Binding("Quantity") });
                 BasketDataGrid.Columns.Add(new DataGridTextColumn { Header = "Добавлено", Binding = new Avalonia.Data.Binding("AddedDate") });
@@ -62,7 +64,6 @@ namespace AvaloniaApplication1.Views
                 ShowMessage($"Ошибка загрузки корзины: {ex.Message}");
             }
         }
-
         private void UpdateTotalInfo()
         {
             var currentUser = ContextData.CurrentLoggedInUser;
@@ -128,6 +129,7 @@ namespace AvaloniaApplication1.Views
 
                 var basketItems = context.Baskets
                     .Where(b => b.UserId == currentUser.Id)
+                    .Include(b => b.Movie)
                     .ToList();
 
                 if (!basketItems.Any())
@@ -136,15 +138,45 @@ namespace AvaloniaApplication1.Views
                     return;
                 }
 
-                context.Baskets.RemoveRange(basketItems);
+                // Создаем заказ с UTC временем
+                var order = new Order
+                {
+                    UserId = currentUser.Id,
+                    OrderDate = DateTime.UtcNow, // Используем UTC
+                    Status = "Completed"
+                };
+
+                // Добавляем заказ в контекст сначала
+                context.Orders.Add(order);
+
+                // Сохраняем, чтобы получить ID заказа
                 context.SaveChanges();
 
-                ShowMessage($"Заказ успешно оформлен! Товаров: {basketItems.Count}");
+                // Теперь добавляем OrderItems с известным OrderId
+                foreach (var basketItem in basketItems)
+                {
+                    var orderItem = new OrderItem
+                    {
+                        OrderId = order.Id, // Используем существующий ID заказа
+                        MovieId = basketItem.MovieId,
+                        Quantity = basketItem.Quantity
+                    };
+                    context.OrderItems.Add(orderItem);
+                }
+
+                // Очищаем корзину
+                context.Baskets.RemoveRange(basketItems);
+
+                // Сохраняем все изменения
+                context.SaveChanges();
+
+                ShowMessage($"Заказ №{order.Id} успешно оформлен! Количество позиций: {basketItems.Count}");
                 LoadBasket();
             }
             catch (Exception ex)
             {
                 ShowMessage($"Ошибка при оформлении заказа: {ex.Message}");
+                Console.WriteLine($"Full error: {ex.ToString()}");
             }
         }
 

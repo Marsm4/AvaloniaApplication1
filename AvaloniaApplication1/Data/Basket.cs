@@ -11,9 +11,9 @@ namespace AvaloniaApplication1.Data
         public int Id { get; set; }
         public int UserId { get; set; }
         public int MovieId { get; set; }
-        public int Quantity { get; set; } = 1;
-        public DateTimeOffset AddedDate { get; set; } = DateTimeOffset.UtcNow;
-   
+        public int Quantity { get; set; }
+        public DateTime AddedDate { get; set; } = DateTime.UtcNow; // Измените на UTC
+
         public virtual User? User { get; set; }
         public virtual Movie? Movie { get; set; }
     }
