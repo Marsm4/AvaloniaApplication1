@@ -59,11 +59,14 @@ namespace AvaloniaApplication1
             var basketId = (int)idProperty.GetValue(basketItemData);
 
             var confirmWindow = new ConfirmDialog("Удалить товар из корзины?");
+            confirmWindow.Height = 100;
+            confirmWindow.Width = 300;
             var parent = this.VisualRoot as Window;
             var result = await confirmWindow.ShowDialog<bool>(parent);
 
             if (result)
             {
+
                 using var context = new AppDbContext();
                 var basketItem = context.Baskets.FirstOrDefault(b => b.Id == basketId);
                 if (basketItem != null)

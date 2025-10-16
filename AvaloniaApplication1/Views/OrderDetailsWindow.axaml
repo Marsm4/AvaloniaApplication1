@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="400"
         x:Class="AvaloniaApplication1.OrderDetailsWindow"
-        Title="Äåòàëè çàêàçà">
+        Title="Ð”ÐµÑ‚Ð°Ð»Ð¸ Ð·Ð°ÐºÐ°Ð·Ð°">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -17,13 +17,13 @@
         
         <DataGrid Grid.Row="2" Name="dgOrderItems" AutoGenerateColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Ôèëüì" Binding="{Binding MovieTitle}" />
-                <DataGridTextColumn Header="Æàíð" Binding="{Binding MovieGenre}" />
-                <DataGridTextColumn Header="Ðåæèññåð" Binding="{Binding MovieDirector}" />
-                <DataGridTextColumn Header="Êîëè÷åñòâî" Binding="{Binding Quantity}" />
+                <DataGridTextColumn Header="Movie" Binding="{Binding MovieTitle}" />
+                <DataGridTextColumn Header="Janr" Binding="{Binding MovieGenre}" />
+                <DataGridTextColumn Header="Rejsser" Binding="{Binding MovieDirector}" />
+                <DataGridTextColumn Header="Kolihestvo" Binding="{Binding Quantity}" />
             </DataGrid.Columns>
         </DataGrid>
         
-        <Button Grid.Row="3" Content="Çàêðûòü" x:Name="btnClose" Click="btnClose_Click" HorizontalAlignment="Right" Margin="10"/>
+        <Button Grid.Row="3" Content="Ð—Ð°ÐºÑ€Ñ‹Ñ‚ÑŒ" x:Name="btnClose" Click="btnClose_Click" HorizontalAlignment="Right" Margin="10"/>
     </Grid>
 </Window>
