@@ -13,10 +13,20 @@ namespace AvaloniaApplication1
     public partial class MoviesPage : UserControl
     {
         private int? _selectedCategoryId = null;
+        private bool _isAdmin; //проверка админуки
 
         public MoviesPage()
         {
             InitializeComponent();
+
+            var currentUser = Data.ContextData.CurrentLoggedInUser;
+            _isAdmin = currentUser?.Role == "Admin";
+            if (!_isAdmin)
+            {
+                btnAddMovie.IsEnabled = false;
+                ShowMessage("Режим просмотра: доступны только функции добавления в корзину");
+            }
+
             LoadCategories();
             Refresh();
         }
@@ -42,6 +52,7 @@ namespace AvaloniaApplication1
 
         private async void btnAddMovie_Click(object? sender, RoutedEventArgs e)
         {
+            if (!_isAdmin) return;
             var parent = this.VisualRoot as Window;
             var add = new AddAndChangeMovie();
 
@@ -67,6 +78,7 @@ namespace AvaloniaApplication1
 
         private async void btnDeleteMovie_Click(object? sender, RoutedEventArgs e)
         {
+            if (!_isAdmin) return;
             var movie = (sender as Button).Tag as Movie;
             var box = MessageBoxManager
                 .GetMessageBoxStandard("Подтверждение", $"Вы уверены, что хотите удалить фильм '{movie.Title}'?",
@@ -97,6 +109,7 @@ namespace AvaloniaApplication1
 
         private async void btnEditMovie_Click(object? sender, RoutedEventArgs e)
         {
+            if (!_isAdmin) return;
             var movie = (sender as Button).Tag as Movie;
             if (movie == null) return;
 
