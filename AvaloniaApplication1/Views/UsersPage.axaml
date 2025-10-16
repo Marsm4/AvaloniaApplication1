@@ -1,0 +1,34 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AvaloniaApplication1.UsersPage">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+
+		<DataGrid Grid.Row="0" Name="dgUsers" AutoGenerateColumns="False">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="Имя" Binding="{Binding Name}" />
+				<DataGridTextColumn Header="Email" Binding="{Binding Email}" />
+				<DataGridTextColumn Header="Роль" Binding="{Binding Role}" />
+
+				<DataGridTemplateColumn Header="Действия">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<StackPanel Orientation="Horizontal">
+								<Button Content="Удалить" Click="btnDeleteUser_Click" Tag="{Binding}"/>
+								<Button Content="Редактировать" Click="btnEditUser_Click" Tag="{Binding}"/>
+							</StackPanel>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+			</DataGrid.Columns>
+		</DataGrid>
+
+		<Button Grid.Row="1" Content="Добавить пользователя" x:Name="btnAddUser" Click="btnAddUser_Click"/>
+	</Grid>
+</UserControl>

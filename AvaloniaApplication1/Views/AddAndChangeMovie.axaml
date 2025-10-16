@@ -1,0 +1,31 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="350"
+        x:Class="AvaloniaApplication1.AddAndChangeMovie"
+        Title="AddAndChangeMovie">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+
+		<TextBlock Text="Название" Grid.Row="0"/>
+		<TextBox x:Name="tbTitle" Grid.Row="1"/>
+		<TextBlock Text="Жанр" Grid.Row="2"/>
+		<TextBox x:Name="tbGenre" Grid.Row="3"/>
+		<TextBlock Text="Режиссер" Grid.Row="4"/>
+		<TextBox x:Name="tbDirector" Grid.Row="5"/>
+		<TextBlock Text="Категория" Grid.Row="6"/>
+		<ComboBox x:Name="cbCategory" Grid.Row="7" DisplayMemberBinding="{Binding Name}"/>
+
+		<Button Grid.Row="8" Content="Сохранить" x:Name="btnSave" Click="btnSave_Click"/>
+	</Grid>
+</Window>

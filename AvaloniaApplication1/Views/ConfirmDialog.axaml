@@ -1,0 +1,21 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="100"
+        x:Class="AvaloniaApplication1.ConfirmDialog"
+        Title="ConfirmDialog">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+
+		<TextBlock Name="tbMessage" Grid.Row="0"/>
+
+		<StackPanel Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal">
+			<Button Content="Да" x:Name="btnYes" Click="btnYes_Click"/>
+			<Button Content="Нет" x:Name="btnNo" Click="btnNo_Click"/>
+		</StackPanel>
+	</Grid>
+</Window>

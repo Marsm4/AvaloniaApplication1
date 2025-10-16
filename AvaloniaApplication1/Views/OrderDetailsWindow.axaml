@@ -1,0 +1,29 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="400"
+        x:Class="AvaloniaApplication1.OrderDetailsWindow"
+        Title="Детали заказа">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" x:Name="tbOrderInfo" FontSize="16" FontWeight="Bold" Margin="10"/>
+        
+        <DataGrid Grid.Row="2" Name="dgOrderItems" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Фильм" Binding="{Binding MovieTitle}" />
+                <DataGridTextColumn Header="Жанр" Binding="{Binding MovieGenre}" />
+                <DataGridTextColumn Header="Режиссер" Binding="{Binding MovieDirector}" />
+                <DataGridTextColumn Header="Количество" Binding="{Binding Quantity}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        
+        <Button Grid.Row="3" Content="Закрыть" x:Name="btnClose" Click="btnClose_Click" HorizontalAlignment="Right" Margin="10"/>
+    </Grid>
+</Window>
